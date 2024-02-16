@@ -6,7 +6,7 @@
 /*   By: jleon-la <jleon-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 14:50:24 by jleon-la          #+#    #+#             */
-/*   Updated: 2024/02/13 12:56:46 by jleon-la         ###   ########.fr       */
+/*   Updated: 2024/02/16 12:12:07 by jleon-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,56 @@ char	*ft_strdup(const char *s1)
 	{
 		memory[i] = s1[i];
 		i++;
+	}
+	memory[i] = '\0';
+	return (memory);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	int	i;
+	int	l;
+
+	i = 0;
+	l = 0;
+	while (s[l])
+	{
+		l++;
+	}
+	while (i <= l)
+	{
+		if (s[i] == (char)c)
+		{
+			return ((char *)&s[i]);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*memory;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	if ((!s1 || s1 == NULL) || (!s2 || s2 == NULL))
+		return (NULL);
+	memory = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!memory)
+		return (NULL);
+	while (s1[i] && s1[i] != '\0')
+	{
+		memory[i] = s1[i];
+		i++;
+	}
+	while (s2[j] && s2[j] != '\0')
+	{
+		memory[i] = s2[j];
+		i++;
+		j++;
 	}
 	memory[i] = '\0';
 	return (memory);

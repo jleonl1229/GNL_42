@@ -6,7 +6,7 @@
 /*   By: jleon-la <jleon-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 14:50:24 by jleon-la          #+#    #+#             */
-/*   Updated: 2024/02/16 12:12:07 by jleon-la         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:03:03 by jleon-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,34 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		j++;
 	}
 	memory[i] = '\0';
+	return (memory);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	size_t	i;
+	size_t	j;
+	char	*memory;
+
+	i = 0;
+	j = 0;
+	if (!s)
+		return (NULL);
+	if (start >= ft_strlen(s) || start < 0 || len < 0)
+		return (ft_strdup(""));
+	if (len > ft_strlen(s) - start)
+		len = ft_strlen(s) - start;
+	while (i < start)
+		i++;
+	memory = malloc(sizeof(char) * (len + 1));
+	if (!memory)
+		return (NULL);
+	while (s && len && j < len)
+	{
+		memory[j] = s[i];
+		i++;
+		j++;
+	}
+	memory[j] = '\0';
 	return (memory);
 }

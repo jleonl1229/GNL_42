@@ -6,7 +6,7 @@
 /*   By: jleon-la <jleon-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 14:50:57 by jleon-la          #+#    #+#             */
-/*   Updated: 2024/02/20 18:37:11 by jleon-la         ###   ########.fr       */
+/*   Updated: 2024/02/21 12:55:06 by jleon-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*get_leftover(char *line)
 			break ;
 		}
 	}
-	leftover = malloc(sizeof(char) * i - ft_strlen(line) + 1);
+	leftover = malloc((ft_strlen(line) + 1) - (sizeof(char) * i));
 	while (line[i])
 	{
 		leftover[j] = line[i];
@@ -97,28 +97,25 @@ char	*get_leftover(char *line)
 char	*cut_print(char *line)
 {
 	char	*cut;
-	size_t	i;
-	size_t	j;
-	size_t	z;
+	int		i;
+	int		j;
+	int		z;
 
 	i = 0;
 	j = 0;
 	z = 0;
 	while (line[i++])
 	{
-		if (line[i] == '\n')
-		{
-			i++;
+		if (line[i++] == '\n')
 			break ;
-		}
 	}
-	cut = malloc(sizeof(char) * i + 1);
-	while (z <= i)
-	{
-		cut[j] = line[z];
-		j++;
-		z++;
-	}
+	cut = malloc(sizeof(char) * (i + 1));
+	if (!cut)
+		return (NULL);
+	printf("%d\n", i);
+	while (z < i)
+		cut[j++] = line[z++];
+	cut[j] = '\0';
 	return (cut);
 }
 
@@ -133,13 +130,19 @@ char	*get_next_line(int fd)
 	line[0] = '\0';
 	while (!ft_strchr(line, '\n'))
 	{
+		// printf("line:%s\n", line);
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		// printf("buffer:%s\n", buffer);
 		buffer[bytes_read] = '\0';
 		line = ft_strjoin(line, buffer);
+		// printf("line2:%s\n", line);
+		// printf("->%c\n", line[0]);
 	}
 	// Tengo que separar esta funcion en el sobrante(caracteres de despues de \n) y lo que se imprimirá en esta linea (antes de \n)
 	save = get_leftover(line);
+	// printf("line :%s\n", line);
 	return (cut_print(line));
+	// return (NULL);
 }
 
 int	main(void)
@@ -149,6 +152,7 @@ int	main(void)
 	fd = open("archivo.txt", O_RDONLY);
 	if (fd == -1)
 		printf("Error on opening the file");
+	// get_next_line(fd);
 	printf("%s", get_next_line(fd));
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jleon-la <jleon-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 14:50:57 by jleon-la          #+#    #+#             */
-/*   Updated: 2024/02/22 18:44:40 by jleon-la         ###   ########.fr       */
+/*   Updated: 2024/02/23 18:49:31 by jleon-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*get_leftover(char *line)
 		return (NULL);
 	while (line[i])
 		leftover[j++] = line[i++];
-	// printf("-->Leftover:%s\n", leftover);
+	printf("-->Leftover:%s\n", leftover);
 	return (leftover);
 }
 
@@ -62,7 +62,7 @@ char	*cut_print(char *line)
 	while (z < i)
 		cut[j++] = line[z++];
 	cut[j] = '\0';
-	// printf("-->CLEAN_Line:%s\n", cut);
+	printf("-->CLEAN_Line:%s\n", cut);
 	return (cut);
 }
 
@@ -73,16 +73,22 @@ char	*get_next_line(int fd)
 	char		*line;
 	size_t		bytes_read;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	line = malloc (sizeof(char) * 1);
 	line[0] = '\0';
-	line = ft_strjoin(line, save);
+	if (ft_strlen(save) >= 1)
+		line = ft_strjoin(line, save);
 	while (!ft_strchr(line, '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read <= 0)
+			return (NULL);
 		buffer[bytes_read] = '\0';
 		line = ft_strjoin(line, buffer);
 	}
 	save = get_leftover(line);
+	// printf("%s", save);
 	return (cut_print(line));
 }
 
@@ -93,10 +99,14 @@ int	main(void)
 	fd = open("archivo.txt", O_RDONLY);
 	if (fd == -1)
 		printf("Error on opening the file");
+	// get_next_line(fd);
+	// get_next_line(fd);
+	// get_next_line(fd);
+	// get_next_line(fd);
 	printf("%s", get_next_line(fd));
 	printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
+	printf("Original: %s\n", get_next_line(fd));
+	printf("%s", get_next_line(fd));
 	// printf("%s", get_next_line(fd));
 	return (0);
 }

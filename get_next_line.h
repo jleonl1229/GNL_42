@@ -6,7 +6,7 @@
 /*   By: jleon-la <jleon-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 14:50:48 by jleon-la          #+#    #+#             */
-/*   Updated: 2024/02/22 16:15:13 by jleon-la         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:54:44 by jleon-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,12 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 4
 # endif
+
+char	*get_next_line(int fd);
+void	ft_bzero(void *s, size_t n);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
+size_t	ft_strlen(const char *length);
+char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strchr(const char *s, int c);
 
 #endif

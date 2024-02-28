@@ -6,7 +6,7 @@
 /*   By: jleon-la <jleon-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 14:50:24 by jleon-la          #+#    #+#             */
-/*   Updated: 2024/02/19 15:03:03 by jleon-la         ###   ########.fr       */
+/*   Updated: 2024/02/28 18:20:05 by jleon-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,16 @@
 
 // join(pero modificarlo para que busque no solo hasta \0 sino tambien hasta \n) memcpopy strlen 
 
-size_t	ft_strlen(const char *length)
+void	ft_bzero(void *s, size_t n)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
-	while (length[i] && length[i] != '\0')
-		i++;
-	return (i);
-}
-
-char	*ft_strdup(const char *s1)
-{
-	size_t		i;
-	char		*memory;
-
-	memory = malloc((ft_strlen(s1) + 1) * sizeof(char));
-	i = 0;
-	if (!memory)
-		return (0);
-	while (i < ft_strlen(s1))
+	while (i < n)
 	{
-		memory[i] = s1[i];
-		i++;
+		((char *)s)[i] = 0;
+		i ++;
 	}
-	memory[i] = '\0';
-	return (memory);
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -64,7 +48,17 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+size_t	ft_strlen(const char *length)
+{
+	int	i;
+
+	i = 0;
+	while (length[i] && length[i] != '\0')
+		i++;
+	return (i);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*memory;
 	size_t	i;
@@ -82,41 +76,28 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		memory[i] = s1[i];
 		i++;
 	}
-	while (s2[j] && s2[j] != '\0')
-	{
-		memory[i] = s2[j];
-		i++;
-		j++;
-	}
+	while (s2[j] && s2[j] != '\0' && s2[j] != '\n')
+		memory[i++] = s2[j++];
+	if (s2[j] == '\n')
+		memory[i++] = s2[j++];
 	memory[i] = '\0';
+	free(s1);
 	return (memory);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
 	size_t	i;
-	size_t	j;
-	char	*memory;
 
 	i = 0;
-	j = 0;
-	if (!s)
-		return (NULL);
-	if (start >= ft_strlen(s) || start < 0 || len < 0)
-		return (ft_strdup(""));
-	if (len > ft_strlen(s) - start)
-		len = ft_strlen(s) - start;
-	while (i < start)
-		i++;
-	memory = malloc(sizeof(char) * (len + 1));
-	if (!memory)
-		return (NULL);
-	while (s && len && j < len)
+	if (dst == 0 && src == 0)
 	{
-		memory[j] = s[i];
-		i++;
-		j++;
+		return (dst);
 	}
-	memory[j] = '\0';
-	return (memory);
+	while (i < n)
+	{
+		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
+		i++;
+	}
+	return (dst);
 }

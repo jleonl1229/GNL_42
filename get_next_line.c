@@ -6,139 +6,80 @@
 /*   By: jleon-la <jleon-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 14:50:57 by jleon-la          #+#    #+#             */
-/*   Updated: 2024/02/26 15:17:08 by jleon-la         ###   ########.fr       */
+/*   Updated: 2024/02/28 19:35:22 by jleon-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strchr(const char *s, int c);
-char	*ft_strdup(const char *s1);
-size_t	ft_strlen(const char *length);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-
-char	*get_leftover(char *line)
+void	get_leftover(char *buffer)
 {
-	char	*leftover;
 	size_t	i;
 	size_t	j;
 
 	i = 0;
+	while (buffer[i] && buffer[i] != '\n')// Contamos caracteres hasta el \0 o el \n
+		i ++;
+	if (buffer[i] == '\n')
+		i++;
 	j = 0;
-	// printf("-->FULL_Line:%s\n", line);
-	while (line[i++])
+	if (!buffer[i])// Si hay problemas nos saca de la función
 	{
-		if (line[i] == '\n')
-			break ;
+		ft_bzero(&buffer[j], BUFFER_SIZE - j);
+		return ;
 	}
-	leftover = malloc(((ft_strlen(line) + 1) - i) * sizeof(char));
-	if (!leftover)
-		return (NULL);
-	while (line[i])
-		leftover[j++] = line[i++];
-	// printf("-->Leftover:%s\n", leftover);
-	return (leftover);
-}
-
-char	*cut_print(char *line)
-{
-	char	*cut;
-	int		i;
-	int		j;
-	int		z;
-
-	i = 0;
-	j = 0;
-	z = 0;
-	while (line[i++])
+	while (buffer[i + j])// Copio el leftover en line[j]
 	{
-		if (line[i] == '\n')
-			break ;
+		buffer[j] = buffer[i + j];
+		j++;
 	}
-	cut = malloc(sizeof(char) * (i + 1));
-	if (!cut)
-		return (NULL);
-	while (z < i)
-		cut[j++] = line[z++];
-	cut[j] = '\0';
-	// printf("-->CLEAN_Line:%s\n", cut);
-	return (cut);
+	ft_bzero(&buffer[j], BUFFER_SIZE - j);// Formateo el contenido de las direcciones de memoria a 0
 }
-
-// char	*get_next_line(int fd)
-// {
-// 	static char	buffer[BUFFER_SIZE + 1];
-// 	static char	*save = "";
-// 	char		*line;
-// 	size_t		bytes_read;
-
-// 	if (fd < 0 || BUFFER_SIZE <= 0)
-// 		return (NULL);
-// 	line = malloc (sizeof(char) * 1);
-// 	line[0] = '\0';
-// 	if (ft_strlen(save) >= 1)
-// 		line = ft_strjoin(line, save);
-// 	while (!ft_strchr(line, '\n'))
-// 	{
-// 		bytes_read = read(fd, buffer, BUFFER_SIZE);
-// 		if (bytes_read <= 0)
-// 			return (NULL);
-// 		buffer[bytes_read] = '\0';
-// 		line = ft_strjoin(line, buffer);
-// 	}
-// 	save = get_leftover(line);
-// 	// printf("%s", save);
-// 	return (cut_print(line));
-// }
 
 char	*get_next_line(int fd)
 {
 	static char	buffer[BUFFER_SIZE + 1];
-	static char	*save = "";
-	// printf("save:%s\n", save);
 	char		*line;
 	size_t		bytes_read;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	line = ft_strdup("");
-	if (ft_strlen(save) >= 1)
-		line = ft_strjoin(line, save);
-	while (!ft_strchr(line, '\n'))
+	line = malloc(sizeof(char) * 1); // Inicializo line
+	if (!line)
+		return (free(line), NULL);
+	line[0] = '\0';
+	if (ft_strlen(buffer) >= 1)//Por si queda algo en el buffer
+		line = ft_strjoin(line, buffer);
+	while (!ft_strchr(buffer, '\n'))// Mientras no haya \n en el contenido del buffer me lees y joineas
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read <= 0)
-			return (NULL);
+		if (bytes_read < 0)
+			return (free(buffer), free(line), NULL);
 		buffer[bytes_read] = '\0';
+		if (bytes_read <= 0)
+			return (ft_bzero(buffer, ft_strlen(buffer)), line);
 		line = ft_strjoin(line, buffer);
+		// printf("quelee:%s", line);
+		// printf("quebuff:%s", buffer);
 	}
-	save = get_leftover(line);
-	// printf("%s", save);
-	return (cut_print(line));
+	get_leftover(buffer);
+	// printf("quebuff2::%s", buffer);
+	return (line);// Me devuelves line pdespués de pasarle el contenido original y quitarle el leftover
 }
 
-int	main(void)
-{
-	int	fd;
+// int	main(void)
+// {
+// 	int	fd;
 
-	fd = open("archivo.txt", O_RDONLY);
-	if (fd == -1)
-		printf("Error on opening the file");
-	// get_next_line(fd);
-	// get_next_line(fd);
-	// get_next_line(fd);
-	// get_next_line(fd);
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("Original: %s\n", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	return (0);
-}
+// 	fd = open("archivo.txt", O_RDONLY); //Abro el archivo y lo cargo en el file descriptor
+// 	if (fd == -1)
+// 		printf("Error on opening the file");
+// 	printf("LINEA1=>%s", get_next_line(fd));
+// 	printf("LINEA2=>%s", get_next_line(fd));
+// 	printf("LINEA3=>%s", get_next_line(fd));
+// 	printf("LINEA4=>%s", get_next_line(fd));
+// 	printf("LINEA5=>%s", get_next_line(fd));
+// 	printf("LINEA6=>%s", get_next_line(fd));
+// 	// printf("%s", get_next_line(fd));
+// 	return (0);
+// }

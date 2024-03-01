@@ -6,13 +6,11 @@
 /*   By: jleon-la <jleon-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 14:50:24 by jleon-la          #+#    #+#             */
-/*   Updated: 2024/02/28 18:20:05 by jleon-la         ###   ########.fr       */
+/*   Updated: 2024/02/29 19:15:10 by jleon-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-
-// join(pero modificarlo para que busque no solo hasta \0 sino tambien hasta \n) memcpopy strlen 
+#include "get_next_line.h" 
 
 void	ft_bzero(void *s, size_t n)
 {

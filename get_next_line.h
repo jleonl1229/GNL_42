@@ -6,7 +6,7 @@
 /*   By: jleon-la <jleon-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 14:50:48 by jleon-la          #+#    #+#             */
-/*   Updated: 2024/02/28 17:54:44 by jleon-la         ###   ########.fr       */
+/*   Updated: 2024/03/04 20:01:06 by jleon-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <fcntl.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 4
+#  define BUFFER_SIZE 43
 # endif
 
 char	*get_next_line(int fd);

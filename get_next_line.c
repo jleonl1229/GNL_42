@@ -40,7 +40,7 @@ char	*get_next_line(int fd)
 {
 	static char	buffer[BUFFER_SIZE + 1];
 	char		*line;
-	int			bytes_read;
+	ssize_t		bytes_read;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -49,23 +49,20 @@ char	*get_next_line(int fd)
 		return (free(line), NULL);
 	line[0] = '\0';
 	if (ft_strlen(buffer) >= 1)
-	{
 		line = ft_strjoin(line, buffer);
-	}
-	bytes_read = 1;
-	while (bytes_read > 0 && !ft_strchr(buffer, '\n'))
+	while (!ft_strchr(buffer, '\n'))
 	{
+		ft_bzero(&buffer, BUFFER_SIZE);
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
 			return (free(line), NULL);
-		if (bytes_read <= 0)
+		if (bytes_read == 0)
 			break ;
 		line = ft_strjoin(line, buffer);
 	}
 	if (line[0] == '\0')
 		return (free(line), NULL);
-	get_leftover(buffer);
-	return (line);
+	return (get_leftover(buffer), line);
 }
 
 // int	main(void)
@@ -79,7 +76,7 @@ char	*get_next_line(int fd)
 // 	//printf("FD=>%d\n", fd);
 // 	printf("LINEA2=>%s", get_next_line(fd));
 // 	// printf("FD=>%d", fd);
-// 	// printf("LINEA3=>%s", get_next_line(fd));
+// 	printf("LINEA3=>%s", get_next_line(fd));
 // 	// printf("FD=>%d", fd);
 // 	// printf("LINEA4=>%s", get_next_line(fd));
 // 	// printf("FD=>%d", fd);
